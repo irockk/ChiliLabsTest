@@ -18,7 +18,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "GIPHY_API_KEY", "ahXehDVV501RGwyo6Uqyh104uGc6d0SS")
+        buildConfigField("String", "GIPHY_API_KEY", "\"ahXehDVV501RGwyo6Uqyh104uGc6d0SS\"")
     }
 
     buildTypes {
