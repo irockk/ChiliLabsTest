@@ -17,6 +17,8 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "GIPHY_API_KEY", "ahXehDVV501RGwyo6Uqyh104uGc6d0SS")
     }
 
     buildTypes {
@@ -28,21 +30,24 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
     kotlinOptions {
         jvmTarget = "11"
     }
+
     buildFeatures {
         compose = true
+        buildConfig = true
     }
-    android {
-        testOptions {
-            unitTests.all {
-                it.useJUnitPlatform()
-            }
+
+    testOptions {
+        unitTests.all {
+            it.useJUnitPlatform()
         }
     }
 }
@@ -68,6 +73,10 @@ dependencies {
     implementation(libs.core.ktx)
     testImplementation(libs.testng)
     ksp(libs.koin.compiler)
+
+    implementation(libs.retrofitDependencies.retrofit)
+    implementation(libs.retrofitDependencies.converter.gson)
+    implementation(libs.gsonDependencies.gson)
 
     implementation(libs.pagingDependencies.runtime)
     implementation(libs.pagingDependencies.compose)
