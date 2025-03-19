@@ -1,27 +1,22 @@
 package com.example.chililabstest.features.giphy.data
 
-import android.util.Log
-import com.example.chililabstest.BuildConfig.GIPHY_API_KEY
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.example.chililabstest.features.giphy.data.models.GifRemoteModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import org.koin.core.annotation.Single
+import kotlinx.coroutines.flow.Flow
+import org.koin.core.annotation.Factory
 
-@Single
-class GiphyRepository(private val giphyService: GiphyService) {
+@Factory
+class GiphyRepository(private val giphyPagingSource: GiphyPagingSource) {
 
-    suspend fun getGifsPaged(): Result<List<GifRemoteModel>> {
-        return withContext(Dispatchers.IO) {
-            val result = giphyService.getGifsPaged(GIPHY_API_KEY)
-            if (result.isSuccessful) {
-                Log.e("success", result.body().toString())
-                Log.e("success", result.body()?.meta.toString())
-                Result.success(result.body()?.data ?: emptyList())
-            } else {
-                Log.e("error", result.errorBody().toString())
-                Log.e("error", result.body()?.meta.toString())
-                Result.failure(NullPointerException())
-            }
-        }
+    fun getGifsPaged(): Flow<PagingData<GifRemoteModel>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 25,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = { giphyPagingSource }
+        ).flow
     }
 }

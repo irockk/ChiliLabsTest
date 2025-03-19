@@ -4,7 +4,6 @@ import android.os.Build.VERSION.SDK_INT
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -12,6 +11,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import coil3.compose.SubcomposeAsyncImage
 import coil3.gif.AnimatedImageDecoder
 import coil3.gif.GifDecoder
@@ -27,22 +28,28 @@ import com.example.chililabstest.ui.theme.Dimens.gifMinSize
 fun CatalogScreen(
     uiState: CatalogState
 ) {
+    val gifs = uiState.gifs.collectAsLazyPagingItems()
     Gifs(
         modifier = Modifier.clip(RoundedCornerShape(Dimens.cornerRadius)),
-        gifs = uiState.gifs
+        gifs = gifs
     )
 }
 
 @Composable
 fun Gifs(
-    modifier: Modifier = Modifier, gifs: List<GifRemoteModel>
+    modifier: Modifier = Modifier,
+    gifs: LazyPagingItems<GifRemoteModel>
 ) {
     LazyVerticalGrid(
         columns = GridCells.Adaptive(gifMinSize),
     ) {
-        items(items = gifs, key = { gif -> gif.id }) { gif ->
+        items(
+            count = gifs.itemCount,
+            key = { it }
+        ) { index ->
             SubcomposeAsyncImage(modifier = modifier,
-                model = ImageRequest.Builder(LocalContext.current).data(gif.images.original.url)
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(gifs[index]?.images?.original?.url)
                     .decoderFactory(if (SDK_INT >= 28) AnimatedImageDecoder.Factory() else GifDecoder.Factory())
                     .build(),
                 contentDescription = null,

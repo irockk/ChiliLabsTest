@@ -1,6 +1,5 @@
 package com.example.chililabstest.features.giphy.data
 
-import com.example.chililabstest.features.giphy.data.models.GifRemoteModel
 import com.example.chililabstest.features.giphy.data.models.GifResponse
 import retrofit2.Response
 import retrofit2.http.GET
