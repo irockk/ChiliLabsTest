@@ -17,7 +17,7 @@ import coil3.compose.SubcomposeAsyncImage
 import coil3.gif.AnimatedImageDecoder
 import coil3.gif.GifDecoder
 import coil3.request.ImageRequest
-import com.example.chililabstest.features.giphy.data.models.GifRemoteModel
+import com.example.chililabstest.features.giphy.presentation.GifPresentationModel
 import com.example.chililabstest.ui.components.ErrorPlaceholder
 import com.example.chililabstest.ui.components.LoadingShimmer
 import com.example.chililabstest.ui.theme.ChiliLabsTestTheme
@@ -38,7 +38,7 @@ fun CatalogScreen(
 @Composable
 fun Gifs(
     modifier: Modifier = Modifier,
-    gifs: LazyPagingItems<GifRemoteModel>
+    gifs: LazyPagingItems<GifPresentationModel>
 ) {
     LazyVerticalGrid(
         columns = GridCells.Adaptive(gifMinSize),
@@ -49,7 +49,7 @@ fun Gifs(
         ) { index ->
             SubcomposeAsyncImage(modifier = modifier,
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data(gifs[index]?.images?.original?.url)
+                    .data(gifs[index]?.url)
                     .decoderFactory(if (SDK_INT >= 28) AnimatedImageDecoder.Factory() else GifDecoder.Factory())
                     .build(),
                 contentDescription = null,
