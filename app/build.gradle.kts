@@ -56,7 +56,7 @@ dependencies {
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.kotlinDependencies.coroutines)
+    implementation(libs.kotlin.coroutines)
 
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
@@ -74,12 +74,18 @@ dependencies {
     testImplementation(libs.testng)
     ksp(libs.koin.compiler)
 
-    implementation(libs.retrofitDependencies.retrofit)
-    implementation(libs.retrofitDependencies.converter.gson)
-    implementation(libs.gsonDependencies.gson)
+    implementation(libs.retrofit.retrofit)
+    implementation(libs.retrofit.converter.gson)
+    implementation(libs.gson.gson)
 
-    implementation(libs.pagingDependencies.runtime)
-    implementation(libs.pagingDependencies.compose)
+    implementation(libs.paging.runtime)
+    implementation(libs.paging.compose)
+
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network)
+    implementation(libs.coil.gif)
+
+    implementation(libs.shimer.shimmer)
 
     androidTestImplementation(libs.androidx.junit)
     testRuntimeOnly(libs.junit.platform)
@@ -93,6 +99,6 @@ dependencies {
 
     testImplementation(libs.mockitoDependency.core)
     testImplementation(libs.mockitoDependency.kotlin)
-    testImplementation(libs.kotlinDependencies.coroutines.test)
+    testImplementation(libs.kotlin.coroutines.test)
     testImplementation(libs.mockitoDependency.inline)
 }
