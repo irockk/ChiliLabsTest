@@ -5,21 +5,31 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.paging.LoadState
@@ -39,13 +49,24 @@ import com.example.chililabstest.ui.theme.Dimens.gifMinSize
 
 @Composable
 fun CatalogScreen(
-    uiState: CatalogState
+    uiState: CatalogState,
+    updateSearchText: (newText: TextFieldValue) -> Unit
 ) {
-    val gifs = uiState.gifs.collectAsLazyPagingItems()
-    Gifs(
-        modifier = Modifier.clip(RoundedCornerShape(Dimens.cornerRadius)),
-        gifs = gifs
-    )
+    Column(modifier = Modifier.fillMaxSize()) {
+        SearchField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(Dimens.screenPadding),
+            text = uiState.searchText,
+            onTextChange = updateSearchText
+        )
+
+        val gifs = uiState.gifs.collectAsLazyPagingItems()
+        Gifs(
+            modifier = Modifier.clip(RoundedCornerShape(Dimens.cornerRadius)),
+            gifs = gifs
+        )
+    }
 }
 
 @Composable
@@ -97,6 +118,33 @@ fun Gifs(
 }
 
 @Composable
+private fun SearchField(
+    modifier: Modifier = Modifier,
+    text: TextFieldValue,
+    onTextChange: (newText: TextFieldValue) -> Unit
+) {
+    TextField(
+        modifier = modifier,
+        value = text,
+        onValueChange = onTextChange,
+        label = {
+            Text(stringResource(R.string.search_label))
+        },
+        shape = RoundedCornerShape(Dimens.cornerRadius),
+        leadingIcon = {
+            Icon(
+                painter = rememberVectorPainter(Icons.Filled.Search),
+                contentDescription = null
+            )
+        },
+        colors = TextFieldDefaults.colors(
+            unfocusedIndicatorColor = Color.Transparent,
+            focusedContainerColor = Color.Transparent
+        )
+    )
+}
+
+@Composable
 private fun ErrorContent(
     modifier: Modifier = Modifier,
     retry: () -> Unit
@@ -135,7 +183,8 @@ private fun LoadingContent(modifier: Modifier = Modifier) {
 fun HomeScreenPreview() {
     ChiliLabsTestTheme {
         CatalogScreen(
-            uiState = CatalogState()
+            uiState = CatalogState(),
+            updateSearchText = {}
         )
     }
 }

@@ -11,7 +11,10 @@ fun CatalogRoute(navController: NavController) {
     val viewModel = koinViewModel<CatalogViewModel>()
     val uiState by viewModel.uiState.collectAsState()
 
-    CatalogScreen(uiState = uiState)
+    CatalogScreen(
+        uiState = uiState,
+        updateSearchText = viewModel::setSearchText
+    )
 }
 
 
