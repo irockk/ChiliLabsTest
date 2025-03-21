@@ -60,10 +60,15 @@ class CatalogViewModel(private val giphyUseCase: GiphyUseCase) : ViewModel() {
                 .filter { it.isNotBlank() }
                 .distinctUntilChanged()
                 .debounce(DEBOUNCE_TIME)
-                .collectLatest {
+                .collectLatest { searchText ->
                     searchJob?.cancel()
-                    val job = {
-                        //perform search
+                    searchJob = viewModelScope.launch {
+                        _uiState.update { uiState ->
+                            uiState.copy(
+                                gifs = giphyUseCase.getSearchedGifsPaged(searchText).map { flow ->
+                                    flow.map { gif -> gif.toPresentation() }
+                                })
+                        }
                     }
                 }
         }

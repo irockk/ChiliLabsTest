@@ -21,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -62,9 +63,15 @@ fun CatalogScreen(
         )
 
         val gifs = uiState.gifs.collectAsLazyPagingItems()
+        val searchedGifs = uiState.searchedGifs.collectAsLazyPagingItems()
+
+        val gifsToShow = remember(uiState.searchText.text.isBlank()) {
+            if (uiState.searchText.text.isBlank()) gifs else searchedGifs
+        }
+
         Gifs(
             modifier = Modifier.clip(RoundedCornerShape(Dimens.cornerRadius)),
-            gifs = gifs
+            gifs = gifsToShow
         )
     }
 }

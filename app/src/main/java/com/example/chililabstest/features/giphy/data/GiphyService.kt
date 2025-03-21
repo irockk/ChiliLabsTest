@@ -13,4 +13,13 @@ interface GiphyService {
         @Query("offset") offset: Int = 0,
         @Query("rating") rating: String = "g"
     ): Response<GifResponse>
+
+    @GET("trending")
+    suspend fun getSearchedGifsPaged(
+        @Query("api_key") apiKey: String,
+        @Query("q") search: String,
+        @Query("limit") limit: Int = 25,
+        @Query("offset") offset: Int = 0,
+        @Query("rating") rating: String = "g"
+    ): Response<GifResponse>
 }

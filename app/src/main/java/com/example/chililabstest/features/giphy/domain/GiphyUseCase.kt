@@ -10,4 +10,8 @@ import org.koin.core.annotation.Factory
 class GiphyUseCase(private val giphyRepository: GiphyRepository) {
 
     fun getGifsPaged(): Flow<PagingData<GifDomainModel>> = giphyRepository.getGifsPaged()
+
+    fun getSearchedGifsPaged(searchText: String): Flow<PagingData<GifDomainModel>> {
+        return giphyRepository.getSearchedGifs(searchText)
+    }
 }
